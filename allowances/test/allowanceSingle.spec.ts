@@ -79,13 +79,16 @@ describe('AllowanceModule allowanceSingle', () => {
     expect(0).to.equal(await token.balanceOf(alice.address))
     expect(0).to.equal(await token.balanceOf(bob.address))
 
-    await execAllowanceTransfer(allowanceModule, {
-      safe: safeAddress,
-      token: tokenAddress,
-      to: bob.address,
-      amount: 60,
-      spender: alice,
-    })
+    await execAllowanceTransfer(
+      allowanceModule,
+      {
+        safe: safeAddress,
+        token: tokenAddress,
+        to: bob.address,
+        amount: 60,
+      },
+      alice
+    )
 
     expect(940).to.equal(await token.balanceOf(safeAddress))
     expect(0).to.equal(await token.balanceOf(alice.address))
@@ -190,13 +193,16 @@ describe('AllowanceModule allowanceSingle', () => {
     expect(0).to.equal(await provider.getBalance(bob))
 
     // send 0.001 to bob using alice's allowance
-    await execAllowanceTransfer(allowanceModule, {
-      safe: safeAddress,
-      token: ZeroAddress,
-      to: bob,
-      amount: parseUnits('0.001', 'ether'),
-      spender: alice,
-    })
+    await execAllowanceTransfer(
+      allowanceModule,
+      {
+        safe: safeAddress,
+        token: ZeroAddress,
+        to: bob,
+        amount: parseUnits('0.001', 'ether'),
+      },
+      alice
+    )
 
     expect(parseUnits('0.999', 'ether')).to.equal(
       await provider.getBalance(safeAddress)
@@ -221,13 +227,16 @@ describe('AllowanceModule allowanceSingle', () => {
     expect(2).to.equal(nonce)
 
     // send 0.001 more
-    await execAllowanceTransfer(allowanceModule, {
-      safe: safeAddress,
-      token: ZeroAddress,
-      to: bob,
-      amount: parseUnits('0.001', 'ether'),
-      spender: alice,
-    })
+    await execAllowanceTransfer(
+      allowanceModule,
+      {
+        safe: safeAddress,
+        token: ZeroAddress,
+        to: bob,
+        amount: parseUnits('0.001', 'ether'),
+      },
+      alice
+    )
 
     expect(parseUnits('0.998', 'ether')).to.equal(
       await provider.getBalance(safeAddress)

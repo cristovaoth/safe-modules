@@ -127,13 +127,16 @@ describe('AllowanceModule allowanceManagement', () => {
     expect(1000).to.equal(await token.balanceOf(safeAddress))
     expect(0).to.equal(await token.balanceOf(bob.address))
 
-    await execAllowanceTransfer(allowanceModule, {
-      safe: safeAddress,
-      token: tokenAddress,
-      to: bob.address,
-      amount: 100,
-      spender: alice,
-    })
+    await execAllowanceTransfer(
+      allowanceModule,
+      {
+        safe: safeAddress,
+        token: tokenAddress,
+        to: bob.address,
+        amount: 100,
+      },
+      alice
+    )
 
     expect(await token.balanceOf(safeAddress)).to.equal(900)
     expect(await token.balanceOf(bob.address)).to.equal(100)
@@ -150,13 +153,16 @@ describe('AllowanceModule allowanceManagement', () => {
 
     // does not work after removing delegate
     await expect(
-      execAllowanceTransfer(allowanceModule, {
-        safe: safeAddress,
-        token: tokenAddress,
-        to: bob.address,
-        amount: 100,
-        spender: alice,
-      })
+      execAllowanceTransfer(
+        allowanceModule,
+        {
+          safe: safeAddress,
+          token: tokenAddress,
+          to: bob.address,
+          amount: 100,
+        },
+        alice
+      )
     ).to.be.revertedWith(
       'newSpent > allowance.spent && newSpent <= allowance.amount'
     )
@@ -189,13 +195,16 @@ describe('AllowanceModule allowanceManagement', () => {
 
     // does not work without an allowance
     await expect(
-      execAllowanceTransfer(allowanceModule, {
-        safe: safeAddress,
-        token: tokenAddress,
-        to: bob.address,
-        amount: 10,
-        spender: alice,
-      })
+      execAllowanceTransfer(
+        allowanceModule,
+        {
+          safe: safeAddress,
+          token: tokenAddress,
+          to: bob.address,
+          amount: 10,
+        },
+        alice
+      )
     ).to.be.revertedWith(
       'newSpent > allowance.spent && newSpent <= allowance.amount'
     )

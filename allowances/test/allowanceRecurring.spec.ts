@@ -74,13 +74,16 @@ describe('AllowanceModule allowanceRecurring', () => {
     expect(0).to.equal(await token.balanceOf(bob.address))
 
     // transfer 60 bucks to bob
-    await execAllowanceTransfer(allowanceModule, {
-      safe: await safe.getAddress(),
-      token: tokenAddress,
-      to: bob.address,
-      amount: 60,
-      spender: alice,
-    })
+    await execAllowanceTransfer(
+      allowanceModule,
+      {
+        safe: await safe.getAddress(),
+        token: tokenAddress,
+        to: bob.address,
+        amount: 60,
+      },
+      alice
+    )
 
     expect(940).to.equal(await token.balanceOf(safeAddress))
     expect(60).to.equal(await token.balanceOf(bob.address))
@@ -100,22 +103,28 @@ describe('AllowanceModule allowanceRecurring', () => {
 
     // check that it fails over limit
     await expect(
-      execAllowanceTransfer(allowanceModule, {
+      execAllowanceTransfer(
+        allowanceModule,
+        {
+          safe: await safe.getAddress(),
+          token: tokenAddress,
+          to: bob.address,
+          amount: 45,
+        },
+        alice
+      )
+    ).to.be.reverted
+
+    await execAllowanceTransfer(
+      allowanceModule,
+      {
         safe: await safe.getAddress(),
         token: tokenAddress,
         to: bob.address,
-        amount: 45,
-        spender: alice,
-      })
-    ).to.be.reverted
-
-    await execAllowanceTransfer(allowanceModule, {
-      safe: await safe.getAddress(),
-      token: tokenAddress,
-      to: bob.address,
-      amount: 40,
-      spender: alice,
-    })
+        amount: 40,
+      },
+      alice
+    )
     expect(900).to.equal(await token.balanceOf(safeAddress))
     expect(100).to.equal(await token.balanceOf(bob.address))
 
@@ -158,13 +167,16 @@ describe('AllowanceModule allowanceRecurring', () => {
     expect(3).to.equal(nonce)
 
     // lets execute on the replenished allowance
-    await execAllowanceTransfer(allowanceModule, {
-      safe: await safe.getAddress(),
-      token: tokenAddress,
-      to: bob.address,
-      amount: 45,
-      spender: alice,
-    })
+    await execAllowanceTransfer(
+      allowanceModule,
+      {
+        safe: await safe.getAddress(),
+        token: tokenAddress,
+        to: bob.address,
+        amount: 45,
+      },
+      alice
+    )
     expect(855).to.equal(await token.balanceOf(safeAddress))
     expect(145).to.equal(await token.balanceOf(bob.address))
     ;[amount, spent, resetPeriod, resetLast, nonce] =

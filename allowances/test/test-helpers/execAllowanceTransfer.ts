@@ -10,14 +10,13 @@ export default async function execAllowanceTransfer(
     token,
     to,
     amount,
-    spender,
   }: {
     safe: string
     token: string
     to: string
     amount: number | bigint
-    spender: SignerWithAddress
-  }
+  },
+  spender: SignerWithAddress
 ) {
   const address = await module.getAddress()
   const chainId = await module.getChainId()
